@@ -21,7 +21,6 @@
 
 **Expense Tracker** is a fully functional, client-side financial application built with **HTML5, CSS3, and Vanilla JavaScript**. It lets users record, view, edit, delete, filter, sort, and analyze personal expenses. All data is persisted in the browser using **LocalStorage**, so expenses survive page refreshes and browser restarts. No backend, no frameworks, no build step.
 
-> **Internship attribution:** 45-day Web Development Internship at **Veda Technology** — Day 41: Interactive Expense Tracker Web Application.
 
 ## Features
 
@@ -109,36 +108,6 @@ All changes are saved automatically to LocalStorage.
 - Storage failures are caught and surfaced via a toast notification.
 - No data leaves the device.
 
-## Testing Checklist
-
-- [x] Add expense with all required fields.
-- [x] Form validation rejects empty / invalid input with inline errors.
-- [x] Edit expense updates the record and UI.
-- [x] Delete expense with confirmation modal.
-- [x] Category filtering works.
-- [x] Date range filtering works.
-- [x] Search works across title, category, description.
-- [x] Sorting by date, amount, title works in both directions.
-- [x] Total, count, monthly, and average stats update automatically.
-- [x] Category breakdown updates automatically.
-- [x] LocalStorage persistence verified after refresh.
-- [x] Responsive layout verified (desktop, tablet, mobile).
-- [x] No console errors on normal flows.
-- [x] XSS-safe rendering of user-entered content.
-
-## Screenshots
-
-Screenshots can be added to an `assets/` subfolder (e.g. `assets/screenshot-desktop.png`) and referenced here:
-
-```markdown
-![Desktop](assets/screenshot-desktop.png)
-```
-
-## Limitations
-
-- Client-side only: no multi-device sync or cloud backup.
-- Data is tied to the browser/profile where it was created.
-- Clearing browser data removes stored expenses.
 
 ---
 
