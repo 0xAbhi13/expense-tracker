@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker — Veda Technology Internship Day 41</title>
+  <meta name="description" content="A premium, responsive expense tracker built with HTML5, CSS3, and vanilla JavaScript. Track, filter, sort, edit and delete expenses with LocalStorage persistence." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header__inner">
+      <a class="brand" href="#dashboard" aria-label="Expense Tracker home">
+        <img class="brand__logo" src="assets/logo.webp" alt="" width="38" height="38" />
+        <span class="brand__text">Expense Tracker</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav" aria-label="Primary">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#add">Add Expense</a>
+        <a href="#transactions">Transactions</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- Dashboard -->
+    <section id="dashboard" class="section" aria-labelledby="dashboardTitle">
+      <div class="section__head">
+        <div>
+          <p class="eyebrow">VEDA TECHNOLOGY INTERNSHIP &middot; DAY 41 / 45</p>
+          <h1 id="dashboardTitle" class="section__title">Financial Dashboard</h1>
+          <p class="section__subtitle">A clear overview of your spending, updated live as you manage expenses.</p>
+        </div>
+      </div>
+
+      <div class="stats" aria-label="Expense statistics">
+        <article class="stat-card">
+          <span class="stat-card__label">Total Expenses</span>
+          <span class="stat-card__value" id="stat-total">₹0.00</span>
+          <span class="stat-card__hint">All time</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Transactions</span>
+          <span class="stat-card__value" id="stat-count">0</span>
+          <span class="stat-card__hint">Recorded</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">This Month</span>
+          <span class="stat-card__value" id="stat-monthly">₹0.00</span>
+          <span class="stat-card__hint" id="stat-month-label">Current month</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Average Expense</span>
+          <span class="stat-card__value" id="stat-average">₹0.00</span>
+          <span class="stat-card__hint">Per transaction</span>
+        </article>
+      </div>
+
+      <div class="card breakdown-card">
+        <div class="card__head">
+          <h2 class="card__title">Spending by Category</h2>
+          <span class="card__meta" id="breakdown-meta">No data yet</span>
+        </div>
+        <div id="breakdownList" class="breakdown-list" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Add / Edit Expense -->
+    <section id="add" class="section" aria-labelledby="formTitle">
+      <div class="card form-card">
+        <div class="card__head">
+          <h2 class="card__title" id="formTitle">Add New Expense</h2>
+          <p class="card__meta">Fill in the details below. All fields except description are required.</p>
+        </div>
+        <form id="expenseForm" class="form" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="title" class="field__label">Title <span class="req">*</span></label>
+              <input type="text" id="title" name="title" class="input" placeholder="e.g. Grocery shopping" maxlength="80" autocomplete="off" required />
+              <span class="field__error" id="err-title" role="alert"></span>
+            </div>
+
+            <div class="field">
+              <label for="amount" class="field__label">Amount (₹) <span class="req">*</span></label>
+              <input type="number" id="amount" name="amount" class="input" placeholder="0.00" min="0.01" step="0.01" inputmode="decimal" required />
+              <span class="field__error" id="err-amount" role="alert"></span>
+            </div>
+
+            <div class="field">
+              <label for="category" class="field__label">Category <span class="req">*</span></label>
+              <select id="category" name="category" class="input" required>
+                <option value="">Select category</option>
+              </select>
+              <span class="field__error" id="err-category" role="alert"></span>
+            </div>
+
+            <div class="field">
+              <label for="date" class="field__label">Date <span class="req">*</span></label>
+              <input type="date" id="date" name="date" class="input" required />
+              <span class="field__error" id="err-date" role="alert"></span>
+            </div>
+
+            <div class="field field--full">
+              <label for="description" class="field__label">Description</label>
+              <textarea id="description" name="description" class="input textarea" placeholder="Optional notes about this expense…" maxlength="300" rows="3"></textarea>
+              <span class="field__error" id="err-description" role="alert"></span>
+              <span class="field__hint">Up to 300 characters.</span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="submitBtn">Add Expense</button>
+            <button type="button" class="btn btn--ghost" id="cancelEditBtn" hidden>Cancel Edit</button>
+            <button type="reset" class="btn btn--ghost" id="resetFormBtn">Reset</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Transactions -->
+    <section id="transactions" class="section" aria-labelledby="transactionsTitle">
+      <div class="card filters-card">
+        <div class="card__head">
+          <h2 class="card__title" id="transactionsTitle">Transactions</h2>
+          <p class="card__meta">Filter, search and sort your expense history.</p>
+        </div>
+        <div class="filters">
+          <div class="field field--compact">
+            <label for="filterCategory" class="field__label">Category</label>
+            <select id="filterCategory" class="input">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+          <div class="field field--compact">
+            <label for="filterFrom" class="field__label">From</label>
+            <input type="date" id="filterFrom" class="input" />
+          </div>
+          <div class="field field--compact">
+            <label for="filterTo" class="field__label">To</label>
+            <input type="date" id="filterTo" class="input" />
+          </div>
+          <div class="field field--compact">
+            <label for="sortBy" class="field__label">Sort By</label>
+            <select id="sortBy" class="input">
+              <option value="date-desc">Date (Newest)</option>
+              <option value="date-asc">Date (Oldest)</option>
+              <option value="amount-desc">Amount (High → Low)</option>
+              <option value="amount-asc">Amount (Low → High)</option>
+              <option value="title-asc">Title (A → Z)</option>
+              <option value="title-desc">Title (Z → A)</option>
+            </select>
+          </div>
+          <div class="field field--compact field--search">
+            <label for="searchInput" class="field__label">Search</label>
+            <input type="search" id="searchInput" class="input" placeholder="Title, category or note…" />
+          </div>
+          <div class="filters__actions">
+            <button type="button" class="btn btn--ghost" id="clearFiltersBtn">Clear Filters</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="transactionList" class="transaction-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built by Abhishek Jadhav &middot; Veda Technology Internship &mdash; Day 41/45 &middot; HTML5 &middot; CSS3 &middot; Vanilla JavaScript</p>
+      <p class="footer__note">Expenses are stored locally in your browser using LocalStorage. No data leaves your device.</p>
+    </div>
+  </footer>
+
+  <!-- Delete confirmation modal -->
+  <div class="modal" id="deleteModal" hidden role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel">
+      <h3 id="deleteTitle" class="modal__title">Delete Expense?</h3>
+      <p id="deleteMessage" class="modal__text">This action cannot be undone.</p>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" data-close>Cancel</button>
+        <button type="button" class="btn btn--danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
